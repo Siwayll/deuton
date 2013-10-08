@@ -49,7 +49,7 @@ class Path
 
         if ($this->_path == false) {
             if (!$option == self::SILENT) {
-                throw new \Exception('Fichier introuvable : ' . $filePath);
+                throw new Exception('Fichier introuvable : ' . $filePath);
             }
         }
     }

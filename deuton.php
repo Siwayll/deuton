@@ -103,10 +103,8 @@ class Deuton
                     self::validateModule($className);
                     $className::interact(array());
                 } catch (\Exception $exc) {
-                    $line = '{%color:red}ERROR{%color:reset} {%background:red}'
-                          . $exc->getMessage() . '{%color:reset}';
-                    Display::line($line);
-                    unset($exc, $line);
+                    self::displayError($exc->getMessage());
+                    unset($exc);
                 }
 
                 continue;
@@ -135,13 +133,19 @@ class Deuton
         /** Configuration de l'autload **/
         spl_autoload_register('\Deuton\Deuton::autoload');
 
-        self::$config = new Config(__DIR__ . DS . 'deuton.ini');
+        try {
+            self::$config = new Config(__DIR__ . DS . 'deuton.ini');
+        } catch (Exception $exc) {
+            self::displayError($exc->getMessage());
+            self::stop();
+        }
 
         self::$arg = new Opt();
 
         $stopCmd = self::$config->get('core', 'stopCmd');
         if (empty($stopCmd)) {
-            throw new Exception('information stopCmd vide');
+            self::displayError('information stopCmd vide');
+            self::stop();
         }
     }
 
@@ -188,6 +192,19 @@ class Deuton
         die("\r\n");
     }
 
+    /**
+     * Affiche une erreur
+     *
+     * @param string $message Message d'erreur
+     *
+     * @return void
+     */
+    public static function displayError($message)
+    {
+        $line = '{%color:red}ERROR{%color:reset} {%background:red}'
+              . $message . '{%color:reset}';
+        Display::line($line);
+    }
 
     /**
      * Chargement dynamique des classes
