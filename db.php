@@ -29,6 +29,12 @@ class DB
     static private $_present;
 
     /**
+     * @var boolean mode de test
+     * @ignore
+     */
+    static public $onlyPrepare = false;
+
+    /**
      * Parametrage de base
      *
      * @var array
@@ -50,35 +56,20 @@ class DB
     /**
      * Crée une connection à la base de données.
      *
-     * @param array  $ini         doit être sous la forme :
-     *      dsn => ''        // chaine de connexion propre à pdo, par exemple :
-     * "mysql:dbname=%s;host=%s" ou "mysql:dbname=%s;host=%s;port=%s"
-     *      host => ''       // host de la connexion à la bdd
-     *      dbname => ''     // Nom de la base de données
-     *      user => ''       // utilisateur mysql
-     *      password => ''   // mot de passe
-     *      port => ''       // [facultatif], port de la connexion
-     *      utf8 => true     // [facultatif], activer encodage buffer sortie
-     *      error => true    // [facultatif], activer les erreurs pdo
-     *      profil => false  // [facultatif], activer le profiling
-     *      nocache => false // [facultatif], désactiver le cache
-     *
+     * @param string $iniPath     Chemin vers un fichier du type bdd.sample.ini
      * @param string $otherDbName Nom de la base de données dans le cas où l'on
      * veut se connecter à une difference de celle présente dans $ini
      *
      * @return \PDO
      */
-    public static function factory($ini, $otherDbName = null)
+    public static function factory($iniPath, $otherDbName = null)
     {
-        if (!is_array($ini)) {
-            $iniPath = new \Deuton\Path($ini);
-            $foo = parse_ini_file($iniPath->get(), true);
-            $ini = $foo['database'];
-            unset($foo, $iniPath);
-        }
+        $config = new \Deuton\Config($iniPath);
+        $ini = $config->get('database');
+        unset($config, $iniPath);
 
         if ($otherDbName) {
-            $ini['dbname'] = $otherDbName;
+            $ini['dbName'] = $otherDbName;
         }
 
         if (isset(self::$_present[$ini['name']])
@@ -87,33 +78,35 @@ class DB
             return self::$_present[$ini['name']];
         }
 
+        $dsn = $ini['dsn'];
 
-        $dsn = sprintf(
-            $ini['dsn'], $ini['dbname'], $ini['host'], $ini['port']
-        );
+        /**  **/
+        if (self::$onlyPrepare === true) {
+            self::$_present[$ini['name']] = $dsn;
+            return $dsn;
+        }
 
         self::$_present[$ini['name']] = new \PDO(
             $dsn, $ini['user'], $ini['password'], self::$_config
         );
 
 
-        /* = Option d'affichage des erreurs
-          | Parametrable dans le config.ini de la bdd
-          `-------------------------------------------------------------------- */
+        /**
+         * Option d'affichage des erreurs
+         * Parametrable dans le config.ini de la bdd
+         **/
         if (isset($ini['error']) && $ini['error'] == true) {
             self::$_present[$ini['name']]->setAttribute(
                 \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION
             );
         }
 
-        /* = Profiling
-          `-------------------------------------------------------------------- */
+        /** Profiling **/
         if (isset($ini['profil']) && $ini['profil'] == true) {
             self::$_present[$ini['name']]->exec('SET profiling = 1;');
         }
 
-        /* = Cache
-          `-------------------------------------------------------------------- */
+        /** Cache **/
         if (isset($ini['nocache']) && $ini['nocache'] == true) {
             self::$_present[$ini['name']]->exec('SET SESSION query_cache_type = OFF;');
         }
@@ -128,9 +121,9 @@ class DB
      *
      * @return void
      */
-    final static public function close($dbName)
+    final static public function kill($dbName)
     {
-        self::$_present[$dbName] = null;
+        unset(self::$_present[$dbName]);
     }
 
 
@@ -148,7 +141,7 @@ class DB
             return self::$_present[$dbName];
         }
 
-        throw new LibException('Aucune connexion sous le nom ' . $dbName);
+        throw new Exception('Aucune connexion sous le nom ' . $dbName);
     }
 }
 
