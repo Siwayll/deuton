@@ -157,6 +157,12 @@ class Config
                         } else {
                             $val = $this->get($divName, $id);
                         }
+                        if ($val === null) {
+                            throw new Exception(
+                                'Aucune correspondance pour ' . $id
+                            );
+                        }
+
                         /* = On replace la valeur de la variable dans le champ
                         `------------------------------------------------- */
                         $value = str_replace(

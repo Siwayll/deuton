@@ -78,6 +78,16 @@ var1 = {%section1:var3}suite
 
 END;
         file_put_contents(TMP_DIR . 'testVar.ini', $data);
+        $data = <<<END
+[section1]
+var1 = {%varrr3}toto
+var3 = result3
+
+[section2]
+var1 = {%section1:var3}suite
+
+END;
+        file_put_contents(TMP_DIR . 'testVarError.ini', $data);
         $dir = TMP_DIR . 'test2.ini';
         $data = <<<END
 [__config]
@@ -115,6 +125,7 @@ END;
         unlink(TMP_DIR . 'test1.ini');
         unlink(TMP_DIR . 'test2.ini');
         unlink(TMP_DIR . 'testVar.ini');
+        unlink(TMP_DIR . 'testVarError.ini');
         unlink(TMP_DIR . 'testExtend.ini');
         unlink(TMP_DIR . 'testExtendMulti.ini');
     }
@@ -123,7 +134,7 @@ END;
      * Contrôle de l'erreur sur mauvais fichier
      *
      * @return void
-     * @expectedException Exception
+     * @expectedException \Deuton\Exception
      */
     public function testConstruct()
     {
@@ -154,6 +165,18 @@ END;
         $conf = new Config(TMP_DIR . 'testVar.ini');
         $this->assertEquals($conf->get('section1', 'var1'), 'result3toto');
         $this->assertEquals($conf->get('section2', 'var1'), 'result3suite');
+    }
+
+    /**
+     * Contrôle de la bonne gestion des variables dans les .ini
+     *
+     * @return void
+     * @expectedException \Deuton\Exception
+     * @expectedExceptionMessage Aucune correspondance pour varrr3
+     */
+    public function testVarError()
+    {
+        $conf = new Config(TMP_DIR . 'testVarError.ini');
     }
 
     /**
