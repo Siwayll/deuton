@@ -28,7 +28,7 @@ interface iModule
     public static function init();
 
     /**
-     * Execution du module en mode direct
+     * Execution du module
      *
      * @param \Deuton\Opt $opt Paramètres de l'utilisateur
      *
@@ -37,19 +37,9 @@ interface iModule
     public static function run(\Deuton\Opt $opt);
 
     /**
-     * Execution du module en mode interactif
-     *
-     * @param \Deuton\Opt $opt Paramètres de l'utilisateur
-     *
-     * @return void
-     */
-    public static function interact(array $param);
-
-    /**
      * Affichage de l'aide
      *
      * @return void
      */
     public static function help();
 }
-

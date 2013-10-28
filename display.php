@@ -1,6 +1,6 @@
 <?php
 /**
- * Gestionnaire des fichiers de configurations
+ * Affichage standardisé avec gestion des couleurs
  *
  * @package    Deuton
  * @subpackage Core
@@ -11,7 +11,7 @@
 namespace Deuton;
 
 /**
- * Gestionnaire des fichiers de configurations
+ * Affichage standardisé avec gestion des couleurs
  *
  * @package    Deuton
  * @subpackage Core
@@ -20,6 +20,22 @@ namespace Deuton;
  */
 class Display
 {
+    /**
+     * Raccourcis d'écriture
+     *
+     * @var array
+     */
+    protected static $short = [
+        'c' => 'color',
+        'b' => 'background',
+        's' => 'style',
+    ];
+
+    /**
+     * Couleurs
+     *
+     * @var array
+     */
     static protected $colors = array(
         'color' => array(
             'black' => 30,
@@ -58,7 +74,7 @@ class Display
      *
      * @return void
      */
-    public static function display($content)
+    public static function write($content)
     {
         echo self::parseColor($content);
     }
@@ -80,11 +96,12 @@ class Display
      * Parse une chaine et met les codes couleurs correspondants
      *
      * @param string $string chaine à parser
+     *
      * @return string
      */
     public static function parseColor($string)
     {
-        $pattern = '#{%([a-z0-9 _:]+)}#i';
+        $pattern = '#{.([a-z0-9 _:]+)}#i';
         preg_match_all($pattern, $string, $matchs);
 
         if (!isset($matchs[1])) {
@@ -95,7 +112,14 @@ class Display
             $color = [];
             $foo = explode(' ', $matchs[1][$i]);
             foreach ($foo as $order) {
+                if ($order === 'reset') {
+                    $color['color'] = 'reset';
+                    break;
+                }
                 $bar = explode(':', $order);
+                if (isset(self::$short[$bar[0]])) {
+                    $bar[0] = self::$short[$bar[0]];
+                }
                 $color[$bar[0]] = $bar[1];
             }
 
@@ -106,13 +130,13 @@ class Display
     }
 
     /**
-     *
+     * Création du code couleur 
      *
      * @param array $color Paramétrage couleur
      *
      * @return string
      */
-    public static function color($color)
+    protected static function color($color)
     {
         $color += array('color' => null, 'style' => null, 'background' => null);
 
@@ -125,7 +149,7 @@ class Display
             if (!isset($color[$type])) {
                 continue;
             }
-            $code = @$color[$type];
+            $code = $color[$type];
             if (isset(self::$colors[$type][$code])) {
                     $colors[] = self::$colors[$type][$code];
             }
@@ -135,7 +159,7 @@ class Display
             $colors[] = 0;
         }
 
-        return "\033[" . join(';', $colors) . "m";
+        return "\033[" . join(';', $colors) . 'm';
     }
 }
 

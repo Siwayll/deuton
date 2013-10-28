@@ -39,13 +39,16 @@ class Opt
      *
      * @var Opt
      */
-    static private $self;
+    static private $self = null;
 
     /**
      * Récupère les options passés en ligne de commande
      */
     public function __construct()
     {
+        if (self::$self !== null) {
+            throw new Exception('Opt ne peut être instancié deux fois');
+        }
 
         $this->getOpts();
 
@@ -67,7 +70,7 @@ class Opt
 
 
     /**
-     * Charge les paramètres
+     * Charge les paramètres passés via la ligne de commande
      *
      * @return void
      * @global array $argv
@@ -77,7 +80,27 @@ class Opt
     {
         global $argv;
 
-        foreach ($argv as $arg) {
+        $this->parse($argv);
+    }
+
+    /**
+     * Lit les paramètres saisis dans l'interface
+     *
+     * @return void
+     */
+    public function parseCmd($cmd)
+    {
+        $args = explode(' ', $cmd);
+        $this->parse($args);
+    }
+
+    /**
+     * 
+     * @return void
+     */
+    protected function parse($args)
+    {
+        foreach ($args as $arg) {
             if (strpos($arg, '-') === 0) {
                 $this->extractOpt($arg);
                 continue;
@@ -95,10 +118,17 @@ class Opt
 
             $this->cmd[] = $arg;
         }
-    }
 
+    }
     /**
-     * Charge un paramètre
+     * Lit un paramètre passé en ligne de commande pour en comprendre le sens
+     *
+     * Sont gérés pour le moment les options sous la forme : 
+     * * a=value
+     * * -a=value
+     * * -avalue
+     * * --a=value
+     * * -une-variable-longue=value
      *
      * @param string $arg chaine contenant un paramètre
      *
@@ -108,14 +138,26 @@ class Opt
     {
         $data = true;
 
+        if (preg_match('#^\-([a-z]{1})([^=]+)$#i', $arg, $match)) {
+            $this->data[$match[1]] = $match[2];
+            return;
+        }
+
+
         $arg = preg_replace('#^\-{1,2}#', '', $arg);
         if (strpos($arg, '=') !== false) {
             $data = substr(strrchr($arg, '='), 1);
             $arg = str_replace('=' . $data, '', $arg);
         }
 
+        /**
+         * Récupération des options de la forme :
+         * -une-variable-longue=value
+         * elle sera enregistrée sous la forme :
+         * unVariableLongue = value
+         */
         if (strpos($arg, '-') !== false) {
-            $foo = explode('-', $key);
+            $foo = explode('-', $arg);
             $foo = array_map('ucfirst', $foo);
             $foo[0] = strtolower($foo[0]);
             $arg = implode('', $foo);

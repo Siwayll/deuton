@@ -49,19 +49,17 @@ class Deuton
     /**
      * Lancement de Deuton
      *
-     * @param $default string Nom du module à utiliser par défaut
+     * @param string $default Nom du module à utiliser par défaut
      *
      * @return void
      */
-    public static function run($default = false)
+    public static function run($default = '')
     {
         self::prepare();
 
-        $arg = new Opt();
-
         $className = self::$arg->getCmd();
         if (empty($className)) {
-            self::runOnlyByInteract($default);
+            self::interact($default);
             return;
         }
         try {
@@ -76,14 +74,18 @@ class Deuton
     }
 
     /**
+     * Fonctionnement par mode intéractif
      *
+     * @param string $default Nom du module à utiliser par défaut
+     *
+     * @return void
      */
-    public static function runOnlyByInteract($default = false)
+    public static function interact($default = '')
     {
         self::prepare();
 
         /** initialisation **/
-        if ($default !== false) {
+        if (!empty($default)) {
             $defaultName = '\\Modules\\' . $default;
             self::validateModule($defaultName);
             $defaultName::init();
@@ -92,16 +94,17 @@ class Deuton
         $stopCmd = self::$config->get('core', 'stopCmd');
 
         do {
-            echo "\033[34m::\033[00m";
+            Display::write(DEUTON_PROMPT);
             $taskName = trim(fgets(STDIN));
             if ($taskName == $stopCmd) {
                 break;
             }
             if (strpos($taskName, ':') === 0) {
-                $className = '\\Modules\\' . str_replace(':', '', $taskName);
+                self::$arg->parseCmd(substr($taskName, 1));
+                $className = self::$arg->getCmd();
                 try {
                     self::validateModule($className);
-                    $className::interact(array());
+                    $className::run(self::$arg);
                 } catch (\Exception $exc) {
                     self::displayError($exc->getMessage());
                     unset($exc);
@@ -140,6 +143,8 @@ class Deuton
             self::stop();
         }
 
+        define('DEUTON_PROMPT', self::$config->get('display', 'prompt'));
+        define('DEUTON_MIN_PROMPT', self::$config->get('display', 'minPrompt'));
         self::$arg = new Opt();
 
         $stopCmd = self::$config->get('core', 'stopCmd');
@@ -147,15 +152,17 @@ class Deuton
             self::displayError('information stopCmd vide');
             self::stop();
         }
+
+        Param::setOpt(self::$arg);
     }
 
     /**
      * Contrôle la validité d'un module
      *
-     * @param type $className
+     * @param string $className Nom de la classe à contrôler
      *
      * @return boolean
-     * @throws Deuton\Exception
+     * @throws Deuton\Exception si la classe n'existe pas
      */
     protected static function validateModule($className)
     {
@@ -226,10 +233,9 @@ class Deuton
         }
 
         if (self::$config->get('error', 'exception') == true) {
-            throw new Exception('Module ' . $name . ' inexistant');
+            throw new Exception('Classe ' . $name . ' inexistante');
         }
 
         return false;
     }
 }
-
