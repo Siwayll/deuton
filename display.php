@@ -130,7 +130,7 @@ class Display
     }
 
     /**
-     * Création du code couleur 
+     * Création du code couleur
      *
      * @param array $color Paramétrage couleur
      *

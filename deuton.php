@@ -2,10 +2,8 @@
 /**
  * FrameWork en lignes de commande
  *
- * @package    Deuton
- * @subpackage Core
- * @author     Siwaÿll <sanath.labs@gmail.com>
- * @license    beerware http://wikipedia.org/wiki/Beerware
+ * @author  Siwaÿll <sanath.labs@gmail.com>
+ * @license beerware http://wikipedia.org/wiki/Beerware
  */
 
 namespace Deuton;
@@ -15,10 +13,8 @@ require __DIR__ . DS . 'path.php';
 /**
  * FrameWork en lignes de commande
  *
- * @package    Deuton
- * @subpackage Core
- * @author     Siwaÿll <sanath.labs@gmail.com>
- * @license    beerware http://wikipedia.org/wiki/Beerware
+ * @author  Siwaÿll <sanath.labs@gmail.com>
+ * @license beerware http://wikipedia.org/wiki/Beerware
  */
 class Deuton
 {
@@ -69,7 +65,7 @@ class Deuton
                 $className::run(self::$arg);
             }
         } catch (\Exception $exc) {
-            \cli\err('%1' . $exc->getMessage() . '%n');
+            Display::line('{.c:white b:red} ' . $exc->getMessage() . ' {.reset}');
         }
     }
 
@@ -153,7 +149,6 @@ class Deuton
             self::stop();
         }
 
-        Param::setOpt(self::$arg);
     }
 
     /**
