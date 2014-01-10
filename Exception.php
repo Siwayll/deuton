@@ -8,7 +8,7 @@
  * @license    beerware http://wikipedia.org/wiki/Beerware
  */
 
-namespace Deuton;
+namespace Siwayll\Deuton;
 
 /**
  * Exception propre à Deuton

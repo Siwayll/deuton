@@ -6,7 +6,7 @@
  * @license beerware http://wikipedia.org/wiki/Beerware
  */
 
-namespace Deuton\Display;
+namespace Siwayll\Deuton\Display;
 
 /**
  * Affichage d'une question à l'utilisateur et récupération de la réponse
@@ -80,11 +80,12 @@ class Get
      * @param callable $func fonction de callback
      *
      * @return self
+     * @throws \Siwayll\Deuton\Exception si $func n'est pas un callback
      */
     public function setControl($func)
     {
         if (!is_callable($func)) {
-            throw new \Deuton\Exception('le paramètre de setControl doit être une function');
+            throw new \Siwayll\Deuton\Exception('le paramètre de setControl doit être une function');
         }
 
         $this->ctrl = $func;
@@ -113,8 +114,8 @@ class Get
     {
         $ok = false;
         do {
-            \Deuton\Display::write($this->message);
-            \Deuton\Display::write(DEUTON_MIN_PROMPT);
+            \Siwayll\Deuton\Display::write($this->message);
+            \Siwayll\Deuton\Display::write(DEUTON_MIN_PROMPT);
             $foo = fgets(STDIN);
             if ($this->trim === true) {
                 $foo = trim($foo);

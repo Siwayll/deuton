@@ -1,20 +1,23 @@
 {
-    "name": "siwayll/deuton",
-    "type": "framework",
-    "description": "PHP cli micro-framework",
-    "keywords": ["cli", "framework", "php"],
-    "license": "BEER-WARE LICENSE",
-    "authors": [
-        {
-            "name": "Siwaÿll",
-            "email": "sana.th.labs@gmail.com",
-            "role": "Developer"
-        }
-    ],
+  "name": "Siwayll/Deuton",
+  "type": "framework",
+  "description": "PHP cli micro-framework",
+  "keywords": ["cli", "framework", "php"],
+  "homepage": "https://github.com/Siwayll/deuton",
+  "license": "BEER-WARE LICENSE",
+  "authors": [
+  {
+    "name": "Siwaÿll",
+    "email": "sana.th.labs@gmail.com",
+    "role": "Developer"
+  }
+  ],
     "require": {
-        "php": ">5.4.0"
+      "php": ">=5.4.0"
     },
     "autoload": {
-        "classmap": ["./"]
+      "psr-0": {
+        "Monolog": "src"
+      }
     }
 }

@@ -8,7 +8,7 @@
  * @license    beerware http://wikipedia.org/wiki/Beerware
  */
 
-namespace Deuton;
+namespace Siwayll\Deuton;
 
 /**
  * Récupération des options en ligne de commande via -

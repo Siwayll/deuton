@@ -6,7 +6,7 @@
  * @license beerware http://wikipedia.org/wiki/Beerware
  */
 
-namespace Deuton;
+namespace Siwayll\Deuton;
 
 require __DIR__ . DS . 'path.php';
 
@@ -157,7 +157,7 @@ class Deuton
      * @param string $className Nom de la classe à contrôler
      *
      * @return boolean
-     * @throws Deuton\Exception si la classe n'existe pas
+     * @throws \Siwayll\Deuton\Exception si la classe n'existe pas
      */
     protected static function validateModule($className)
     {
@@ -173,8 +173,8 @@ class Deuton
     /**
      * Execute un module
      *
-     * @param string     $className Nom du module à charger
-     * @param Deuton\Opt $arg       Options
+     * @param string              $className Nom du module à charger
+     * @param \Siwayll\Deuton\Opt $arg       Options
      *
      * @return void
      */

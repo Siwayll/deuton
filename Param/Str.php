@@ -8,7 +8,7 @@
  * @license    GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
 
-namespace Deuton\Param;
+namespace Siwayll\Deuton\Param;
 
 /**
  * Récupération d'une chaine

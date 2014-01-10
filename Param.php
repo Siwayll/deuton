@@ -6,7 +6,7 @@
  * @license beerware http://wikipedia.org/wiki/Beerware
  */
 
-namespace Deuton;
+namespace Siwayll\Deuton;
 
 /**
  * Récupération d'une variable
@@ -60,7 +60,7 @@ abstract class Param
      */
     protected function getViaPrompt()
     {
-        $get = new \Deuton\Display\Get();
+        $get = new Display\Get();
         $get->useTrim($this->useTrim)
             ->notEmpty($this->notEmpty)
             ->setMessage($this->message);
@@ -78,11 +78,11 @@ abstract class Param
     /**
      * Récupération des options passées lors de l'execution du script
      *
-     * @param \Deuton\Opt $opt options
+     * @param Opt $opt options
      *
      * @return void
      */
-    final public static function setOpt(\Deuton\Opt $opt)
+    final public static function setOpt(Opt $opt)
     {
         self::$opt = $opt;
     }

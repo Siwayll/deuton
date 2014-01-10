@@ -8,7 +8,7 @@
  * @license    beerware http://wikipedia.org/wiki/Beerware
  */
 
-namespace Deuton;
+namespace Siwayll\Deuton;
 
 /**
  * Interface pour les modules
@@ -30,11 +30,11 @@ interface iModule
     /**
      * Execution du module
      *
-     * @param \Deuton\Opt $opt Paramètres de l'utilisateur
+     * @param Opt $opt Paramètres de l'utilisateur
      *
      * @return void
      */
-    public static function run(\Deuton\Opt $opt);
+    public static function run(Opt $opt);
 
     /**
      * Affichage de l'aide
