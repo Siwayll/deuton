@@ -1,5 +1,5 @@
 {
-    "name": "deuton",
+    "name": "siwayll/deuton",
     "type": "framework",
     "description": "PHP cli micro-framework",
     "keywords": ["cli", "framework", "php"],
