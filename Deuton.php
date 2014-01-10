@@ -219,7 +219,7 @@ class Deuton
      */
     public static function autoload($name)
     {
-        $fileName = strtolower($name) . '.php';
+        $fileName = $name . '.php';
         $fileName = str_replace('_', '\\', $fileName);
         $fileName = str_replace('\\', DIRECTORY_SEPARATOR, $fileName);
 
