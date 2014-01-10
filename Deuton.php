@@ -8,7 +8,7 @@
 
 namespace Siwayll\Deuton;
 
-require __DIR__ . DS . 'path.php';
+require __DIR__ . DS . 'Path.php';
 
 /**
  * FrameWork en lignes de commande
@@ -81,6 +81,7 @@ class Deuton
         self::prepare();
 
         /** initialisation **/
+        $defaultName = null;
         if (!empty($default)) {
             $defaultName = '\\Modules\\' . $default;
             self::validateModule($defaultName);
@@ -113,7 +114,9 @@ class Deuton
                 continue;
             }
             $param = array($taskName);
-            $defaultName::interact($param);
+            if ($defaultName !== null) {
+                $defaultName::interact($param);
+            }
         } while ($taskName != $stopCmd);
     }
 
@@ -130,7 +133,7 @@ class Deuton
         }
 
         /** Configuration de l'autload **/
-        spl_autoload_register('\Deuton\Deuton::autoload');
+        spl_autoload_register('\Siwayll\Deuton\Deuton::autoload');
 
         try {
             self::$config = new Config(__DIR__ . DS . 'deuton.ini');
