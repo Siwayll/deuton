@@ -36,8 +36,8 @@ class Path
     /**
      * Test le chemin relatif $filePath
      *
-     * @param string $filePath Chemin relatif à tester
-     * @param mixed  $option   Constante à mettre pour changer le comportement (voir SILENT)
+     * @param string   $filePath Chemin relatif à tester
+     * @param integer  $option   Constante à mettre pour changer le comportement (voir SILENT)
      *
      * @throws Exception Fichier introuvable.
      * @uses Path::test()
@@ -113,7 +113,7 @@ class Path
      *
      * @param string $filePath Chemin vers le fichier
      *
-     * @return mixed le chemin du fichier ou FALSE si il n'existe aucun fichier
+     * @return string|flase le chemin du fichier ou FALSE si il n'existe aucun fichier
      */
     private function test($filePath)
     {

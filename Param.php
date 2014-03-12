@@ -90,7 +90,7 @@ abstract class Param
     /**
      * Renvois la valeur demandée
      *
-     * @return mixed
+     * @return string
      */
     final public function get()
     {

@@ -86,6 +86,8 @@ class Opt
     /**
      * Lit les paramètres saisis dans l'interface
      *
+     * @param string $cmd commande à lire
+     *
      * @return void
      */
     public function parseCmd($cmd)

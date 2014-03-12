@@ -108,7 +108,7 @@ class Get
     /**
      * Pose la question et récupère la réponse
      *
-     * @return mixed
+     * @return string
      */
     public function run()
     {
