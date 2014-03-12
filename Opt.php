@@ -112,7 +112,7 @@ class Opt
             }
 
             if (strpos($arg, '-') !== false) {
-                $foo = explode('-', $key);
+                $foo = explode('-', $arg);
                 $foo = array_map('ucfirst', $foo);
                 $arg = implode('', $foo);
                 unset($foo);

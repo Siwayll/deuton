@@ -26,6 +26,8 @@ abstract class Param
 
     protected $setControl = 'default';
 
+    protected $message = '';
+
     /**
      * Liste des codes utilisés pour la récupération des variables
      *

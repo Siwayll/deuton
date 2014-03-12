@@ -72,6 +72,9 @@ class Path
      */
     public function get()
     {
+        if ($this->_path === false) {
+            return null;
+        }
         if (is_dir($this->_path)) {
             return $this->_path . DIRECTORY_SEPARATOR;
         } else {

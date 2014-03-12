@@ -37,6 +37,8 @@ class Config
      */
     private $config = null;
 
+    private $headerConfig = null;
+
     /**
      * Charge un nouveau fichier de configuration
      *
@@ -48,7 +50,10 @@ class Config
     public function __construct($iniFile)
     {
         $iniPath = new Path($iniFile);
-        $this->config = parse_ini_file($iniPath->get(), true);
+        $confPath = $iniPath->get();
+        if ($confPath !== false) {
+            $this->config = parse_ini_file($confPath, true);
+        }
 
         $this->headerConfig = $config = $this->get(self::KEY_CONF);
         unset($this->config[self::KEY_CONF]);
@@ -90,7 +95,10 @@ class Config
     public function setExtends($path)
     {
         $iniPath = new Path($path);
-        $configBase = parse_ini_file($iniPath->get(), true);
+        $confPath = $iniPath->get();
+        if ($confPath !== false) {
+            $configBase = parse_ini_file($confPath, true);
+        }
         $this->config = $this->arrayMerge($configBase, $this->config);
     }
 
