@@ -130,9 +130,6 @@ class Deuton
             return;
         }
 
-        /** Configuration de l'autload **/
-        spl_autoload_register('\Siwayll\Deuton\Deuton::autoload');
-
         self::$config = $conf;
 
         define('DEUTON_PROMPT', self::$config->get('display', 'prompt'));
@@ -202,33 +199,5 @@ class Deuton
         $line = '{%color:red}ERROR{%color:reset} {%background:red}'
               . $message . '{%color:reset}';
         Display::line($line);
-    }
-
-    /**
-     * Chargement dynamique des classes
-     *
-     * @param string $name Nom du fichier à inclure
-     *
-     * @return boolean
-     * @uses Deuton\Path
-     * @throws
-     */
-    public static function autoload($name)
-    {
-        $fileName = $name . '.php';
-        $fileName = str_replace('_', '\\', $fileName);
-        $fileName = str_replace('\\', DIRECTORY_SEPARATOR, $fileName);
-
-        $path = new Path($fileName, Path::SILENT);
-        if ($path->get()) {
-            include_once $path->get();
-            return true;
-        }
-
-        if (self::$config->get('error', 'exception') == true) {
-            throw new Exception('Classe ' . $name . ' inexistante');
-        }
-
-        return false;
     }
 }
