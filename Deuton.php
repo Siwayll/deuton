@@ -8,8 +8,6 @@
 
 namespace Siwayll\Deuton;
 
-require __DIR__ . DS . 'Path.php';
-
 /**
  * FrameWork en lignes de commande
  *
@@ -49,9 +47,9 @@ class Deuton
      *
      * @return void
      */
-    public static function run($default = '')
+    public static function run(Config $conf, $default = '')
     {
-        self::prepare();
+        self::prepare($conf);
 
         $className = self::$arg->getCmd();
         if (empty($className)) {
@@ -125,7 +123,7 @@ class Deuton
      *
      * @return void
      */
-    public static function prepare()
+    public static function prepare($conf = null)
     {
         /** On empêche la répétition de la préparation **/
         if (self::$config !== false) {
@@ -135,12 +133,7 @@ class Deuton
         /** Configuration de l'autload **/
         spl_autoload_register('\Siwayll\Deuton\Deuton::autoload');
 
-        try {
-            self::$config = new Config(__DIR__ . DS . 'deuton.ini');
-        } catch (Exception $exc) {
-            self::displayError($exc->getMessage());
-            self::stop();
-        }
+        self::$config = $conf;
 
         define('DEUTON_PROMPT', self::$config->get('display', 'prompt'));
         define('DEUTON_MIN_PROMPT', self::$config->get('display', 'minPrompt'));
