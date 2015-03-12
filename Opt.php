@@ -97,7 +97,7 @@ class Opt
     }
 
     /**
-     * 
+     *
      * @return void
      */
     protected function parse($args)
@@ -125,7 +125,7 @@ class Opt
     /**
      * Lit un paramètre passé en ligne de commande pour en comprendre le sens
      *
-     * Sont gérés pour le moment les options sous la forme : 
+     * Sont gérés pour le moment les options sous la forme :
      * * a=value
      * * -a=value
      * * -avalue
@@ -191,7 +191,8 @@ class Opt
         }
         $className = array_pop($this->cmd);
         $className = ucfirst(strtolower($className));
-        $name = '\\Modules\\';
+        $conf = Deuton::getConf();
+        $name = $conf->get('core', 'moduleNamespace');
         foreach ($this->cmd as $cmd) {
             $cmd = ucfirst(strtolower($cmd));
             $name .= $cmd . '\\';

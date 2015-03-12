@@ -24,7 +24,7 @@ class Deuton
     /**
      * Nom de l'interface des modules Deuton
      */
-    const INTERFACE_NAME = 'Deuton\iModule';
+    const INTERFACE_NAME = 'Siwayll\Deuton\iModule';
 
     /**
      * Configuration de Deuton
@@ -41,49 +41,25 @@ class Deuton
     protected static $arg;
 
     /**
+     *
+     * @var \Siwayll\Deuton\Display
+     */
+    protected static $display;
+
+    /**
      * Lancement de Deuton
      *
+     * @param Config $conf    Configuration de base de Deuton
      * @param string $default Nom du module à utiliser par défaut
-     *
-     * @return void
      */
     public static function run(Config $conf, $default = '')
     {
         self::prepare($conf);
 
         $className = self::$arg->getCmd();
-        if (empty($className)) {
-            self::interact($default);
-            return;
-        }
-        try {
-            if (isset(self::$arg->h)) {
-                $className::help();
-            } else {
-                $className::run(self::$arg);
-            }
-        } catch (\Exception $exc) {
-            Display::line('{.c:white b:red} ' . $exc->getMessage() . ' {.reset}');
-        }
-    }
-
-    /**
-     * Fonctionnement par mode intéractif
-     *
-     * @param string $default Nom du module à utiliser par défaut
-     *
-     * @return void
-     */
-    public static function interact($default = '')
-    {
-        self::prepare();
-
-        /** initialisation **/
-        $defaultName = null;
-        if (!empty($default)) {
-            $defaultName = '\\Modules\\' . $default;
-            self::validateModule($defaultName);
-            $defaultName::init();
+        if (!empty($className)) {
+            self::exec($className);
+            self::stop();
         }
 
         $stopCmd = self::$config->get('core', 'stopCmd');
@@ -96,15 +72,7 @@ class Deuton
             }
             if (strpos($taskName, ':') === 0) {
                 self::$arg->parseCmd(substr($taskName, 1));
-                $className = self::$arg->getCmd();
-                try {
-                    self::validateModule($className);
-                    $className::run(self::$arg);
-                } catch (\Exception $exc) {
-                    self::displayError($exc->getMessage());
-                    unset($exc);
-                }
-
+                self::exec(self::$arg->getCmd());
                 continue;
             }
 
@@ -116,6 +84,17 @@ class Deuton
                 $defaultName::interact($param);
             }
         } while ($taskName != $stopCmd);
+    }
+
+    protected static function exec($className)
+    {
+        try {
+            self::validateModule($className);
+            $className::run(self::$arg);
+        } catch (\Exception $exc) {
+            self::displayError($exc->getMessage());
+            unset($exc);
+        }
     }
 
     /**
@@ -141,7 +120,16 @@ class Deuton
             self::displayError('information stopCmd vide');
             self::stop();
         }
+    }
 
+    /**
+     * Renvoie la configuration Deuton
+     *
+     * @return Config
+     */
+    public static function getConf()
+    {
+        return self::$config;
     }
 
     /**
@@ -156,7 +144,7 @@ class Deuton
     {
         if (class_exists($className)) {
             $interfaces = class_implements($className, true);
-            if (in_array(self::INTERFACE_NAME, $interfaces)) {
+            if (isset($interfaces[self::INTERFACE_NAME])) {
                 return true;
             }
         }
@@ -184,7 +172,7 @@ class Deuton
      */
     public static function stop()
     {
-        die("\r\n");
+        die("\r");
     }
 
     /**
