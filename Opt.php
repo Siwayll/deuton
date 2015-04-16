@@ -190,11 +190,15 @@ class Opt
             return null;
         }
         $className = array_pop($this->cmd);
-        $className = ucfirst(strtolower($className));
+        if ($className != ucfirst($className)) {
+            $className = ucfirst(strtolower($className));
+        }
         $conf = Deuton::getConf();
         $name = $conf->get('core', 'moduleNamespace');
         foreach ($this->cmd as $cmd) {
-            $cmd = ucfirst(strtolower($cmd));
+            if ($cmd != ucfirst($cmd)) {
+                $cmd = ucfirst(strtolower($cmd));
+            }
             $name .= $cmd . '\\';
         }
 
