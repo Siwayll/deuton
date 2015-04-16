@@ -14,14 +14,8 @@ class Handler extends \Monolog\Handler\AbstractProcessingHandler
 {
     protected function write(array $record)
     {
-        switch ($record['level_name']) {
-
-            default:
-                $message = $record['message'];
-                break;
-        }
+        $message = $record['message'];
 
         Display::line($message);
     }
 }
-
