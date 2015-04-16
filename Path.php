@@ -23,7 +23,7 @@ class Path
     /**
      * Chemin absolu vers le fichier
      *
-     * @var string
+     * @var string|string
      */
     protected $path = '';
 
