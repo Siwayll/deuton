@@ -36,7 +36,7 @@ class Deuton
     /**
      * Arguments de la commande
      *
-     * @var Siwayll\Deuton\Opt
+     * @var \Siwayll\Deuton\Opt
      */
     protected static $arg;
 
