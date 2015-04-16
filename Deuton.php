@@ -36,7 +36,7 @@ class Deuton
     /**
      * Arguments de la commande
      *
-     * @var \Deuton\Opt
+     * @var Siwayll\Deuton\Opt
      */
     protected static $arg;
 
@@ -50,9 +50,10 @@ class Deuton
      * Lancement de Deuton
      *
      * @param Config $conf    Configuration de base de Deuton
-     * @param string $default Nom du module à utiliser par défaut
+     *
+     * @return void
      */
-    public static function run(Config $conf, $default = '')
+    public static function run(Config $conf)
     {
         self::prepare($conf);
 
@@ -74,14 +75,6 @@ class Deuton
                 self::$arg->parseCmd(substr($taskName, 1));
                 self::exec(self::$arg->getCmd());
                 continue;
-            }
-
-            if ($default === false) {
-                continue;
-            }
-            $param = array($taskName);
-            if ($defaultName !== null) {
-                $defaultName::interact($param);
             }
         } while ($taskName != $stopCmd);
     }
