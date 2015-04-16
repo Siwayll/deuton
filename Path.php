@@ -25,7 +25,7 @@ class Path
      *
      * @var string
      */
-    protected $_path = '';
+    protected $path = '';
 
     /**
      * Mode silencieux
@@ -45,9 +45,9 @@ class Path
      */
     public function __construct($filePath, $option = 0)
     {
-        $this->_path = $this->test($filePath);
+        $this->path = $this->test($filePath);
 
-        if ($this->_path == false) {
+        if ($this->path === false) {
             if (!$option == self::SILENT) {
                 throw new Exception('Fichier introuvable : ' . $filePath);
             }
@@ -72,13 +72,13 @@ class Path
      */
     public function get()
     {
-        if ($this->_path === false) {
+        if ($this->path === false) {
             return null;
         }
-        if (is_dir($this->_path)) {
-            return $this->_path . DIRECTORY_SEPARATOR;
+        if (is_dir($this->path)) {
+            return $this->path . DIRECTORY_SEPARATOR;
         } else {
-            return $this->_path;
+            return $this->path;
         }
     }
 
@@ -90,7 +90,7 @@ class Path
      * @return boolean True si l'opération c'est bien déroulée.
      * @static
      */
-    static public function addPath($path)
+    public static function addPath($path)
     {
         $path = realpath($path);
         if (!$path) {
@@ -104,8 +104,8 @@ class Path
             }
         }
 
-        set_include_path(get_include_path()
-            . PATH_SEPARATOR . $path
+        set_include_path(
+            get_include_path() . PATH_SEPARATOR . $path
         );
 
         return true;
@@ -135,4 +135,3 @@ class Path
         return false;
     }
 }
-
