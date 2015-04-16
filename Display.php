@@ -108,7 +108,8 @@ class Display
             return $string;
         }
 
-        for ($i = 0; $i < count($matchs[1]); $i++) {
+        $max = count($matchs[1]);
+        for ($i = 0; $i < $max; $i++) {
             $color = [];
             $foo = explode(' ', $matchs[1][$i]);
             foreach ($foo as $order) {
@@ -162,4 +163,3 @@ class Display
         return "\033[" . join(';', $colors) . 'm';
     }
 }
-

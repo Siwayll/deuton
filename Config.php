@@ -44,7 +44,6 @@ class Config
      *
      * @param string $iniFile Chemin vers le fichier de configuration
      *
-     * @return void
      * @uses Path Contrôle du chemin du fichier
      */
     public function __construct($iniFile)
@@ -115,8 +114,9 @@ class Config
         $merged = $array1;
 
         foreach ($array2 as $key => &$value) {
-            if (is_array($value) && isset($merged[$key])
-                && is_array ( $merged [$key] )
+            if (is_array($value)
+                && isset($merged[$key])
+                && is_array($merged [$key])
             ) {
                 $merged [$key] = $this->arrayMerge($merged [$key], $value);
             } else {
@@ -153,7 +153,8 @@ class Config
 
                 if (preg_match_all(self::VAR_FORMAT, $value, $matches)) {
 
-                    for ($i = 0; $i < count($matches[0]); $i++) {
+                    $max = count($matches[0]);
+                    for ($i = 0; $i < $max; $i++) {
                         $id = $matches[1][$i];
                         /* = Si il y a un : dans le nom de la variable c'est
                         | qu'elle pointe sur un autre bloc
@@ -174,7 +175,9 @@ class Config
                         /* = On replace la valeur de la variable dans le champ
                         `------------------------------------------------- */
                         $value = str_replace(
-                            $matches[0][$i], $val, $value
+                            $matches[0][$i],
+                            $val,
+                            $value
                         );
 
                         $this->config[$divName][$key] = $value;
@@ -218,4 +221,3 @@ class Config
         return null;
     }
 }
-
