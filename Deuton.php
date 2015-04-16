@@ -142,11 +142,12 @@ class Deuton
      */
     protected static function validateModule($className)
     {
-        if (class_exists($className)) {
-            $interfaces = class_implements($className, true);
-            if (isset($interfaces[self::INTERFACE_NAME])) {
-                return true;
-            }
+        if (!class_exists($className)) {
+            throw new Exception('Module ' . $className . ' introuvable');
+        }
+        $interfaces = class_implements($className, true);
+        if (isset($interfaces[self::INTERFACE_NAME])) {
+            return true;
         }
         throw new Exception('Module ' . $className . ' incorrecte');
     }
