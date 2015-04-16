@@ -116,7 +116,7 @@ class Path
      *
      * @param string $filePath Chemin vers le fichier
      *
-     * @return string|flase le chemin du fichier ou FALSE si il n'existe aucun fichier
+     * @return string|false le chemin du fichier ou FALSE si il n'existe aucun fichier
      */
     private function test($filePath)
     {
