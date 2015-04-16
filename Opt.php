@@ -190,20 +190,32 @@ class Opt
             return null;
         }
         $className = array_pop($this->cmd);
-        if ($className != ucfirst($className)) {
-            $className = ucfirst(strtolower($className));
-        }
+        $className = $this->formatCmd($className);
         $conf = Deuton::getConf();
         $name = $conf->get('core', 'moduleNamespace');
         foreach ($this->cmd as $cmd) {
-            if ($cmd != ucfirst($cmd)) {
-                $cmd = ucfirst(strtolower($cmd));
-            }
+            $cmd = $this->formatCmd($cmd);
             $name .= $cmd . '\\';
         }
 
         $name .= $className;
 
+        return $name;
+    }
+
+    /**
+     * Format le nom pour respecter la casse des classes
+     *
+     * @var $name string Paramètre de la commande
+     *
+     * @return string
+     */
+    private function formatCmd($name)
+    {
+        $upperName = ucfirst($name);
+        if ($name != $upperName) {
+            return $upperName;
+        }
         return $name;
     }
 
