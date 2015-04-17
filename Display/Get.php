@@ -21,7 +21,7 @@ class Get
      *
      * @var boolean
      */
-    private $trim = false;
+    private $trim = true;
 
     /**
      *
