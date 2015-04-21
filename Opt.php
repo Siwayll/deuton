@@ -224,7 +224,7 @@ class Opt
      *
      * @return Opt
      */
-    static public function get()
+    public static function get()
     {
         return self::$self;
     }
