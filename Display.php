@@ -29,6 +29,33 @@ class Display
         'c' => 'color',
         'b' => 'background',
         's' => 'style',
+        't' => 'template',
+    ];
+
+    /**
+     * Styles pré-formatés
+     *
+     * @var array
+     */
+    protected static $templates = [
+        'focus' => [
+            'color' => 'blue',
+            'style' => 'underscore'
+        ],
+        'alert' => [
+            'color' => 'white',
+            'background' => 'red'
+        ],
+        'warning' => [
+            'color' => 'red'
+        ],
+        'success' => [
+            'color' => 'green'
+        ],
+        'greatSuccess' => [
+            'color' => 'white',
+            'background' => 'green'
+        ],
     ];
 
     /**
@@ -121,6 +148,12 @@ class Display
                 if (isset(self::$short[$bar[0]])) {
                     $bar[0] = self::$short[$bar[0]];
                 }
+
+                if ($bar[0] == 'template') {
+                    $color = self::$templates[$bar[1]];
+                    break;
+                }
+
                 $color[$bar[0]] = $bar[1];
             }
 
