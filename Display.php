@@ -140,27 +140,40 @@ class Display
             $color = [];
             $foo = explode(' ', $matchs[1][$i]);
             foreach ($foo as $order) {
-                if ($order === 'reset') {
-                    $color['color'] = 'reset';
-                    break;
-                }
-                $bar = explode(':', $order);
-                if (isset(self::$short[$bar[0]])) {
-                    $bar[0] = self::$short[$bar[0]];
-                }
-
-                if ($bar[0] == 'template') {
-                    $color = self::$templates[$bar[1]];
-                    break;
-                }
-
-                $color[$bar[0]] = $bar[1];
+                self::parseOrder($color, $order);
             }
 
             $string = str_replace($matchs[0][$i], self::color($color), $string);
         }
 
         return $string;
+    }
+
+    /**
+     * Interprête un ordre de formatage
+     *
+     * @param array  $color Ordre interprété
+     * @param string $order Ordre de formatage
+     *
+     * @return void
+     */
+    protected static function parseOrder(&$color, $order)
+    {
+        if ($order === 'reset') {
+            $color['color'] = 'reset';
+            return;
+        }
+        $bar = explode(':', $order);
+        if (isset(self::$short[$bar[0]])) {
+            $bar[0] = self::$short[$bar[0]];
+        }
+
+        if ($bar[0] == 'template') {
+            $color = self::$templates[$bar[1]];
+            return;
+        }
+
+        $color[$bar[0]] = $bar[1];
     }
 
     /**
