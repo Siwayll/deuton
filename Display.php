@@ -118,6 +118,24 @@ class Display
         echo self::parseColor($content) . "\r\n";
     }
 
+    /**
+     * Met une chaîne à la taille demandée
+     *
+     * @param string $content La chaîne d'entrée
+     * @param int    $length  Longueur de justification
+     * @param string $str     Chaîne qui sert à compléter
+     * @param int    $type    Paramétrage de str_pad
+     *
+     * @return string
+     */
+    public static function pad($content, $length, $str = ' ', $type = STR_PAD_RIGHT)
+    {
+        if (strlen($content) > $length - 3) {
+            $content = substr($content, 0, $length - 3) . '...';
+        }
+        return str_pad($content, $length, $str, $type);
+    }
+
 
     /**
      * Parse une chaine et met les codes couleurs correspondants
