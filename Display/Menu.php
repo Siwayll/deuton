@@ -18,6 +18,13 @@ class Menu
      */
     protected $getter;
 
+    /**
+     * Liste des éléments du menu
+     *
+     * @var array
+     */
+    protected $data;
+
     private $defaultValue = null;
 
     /**
